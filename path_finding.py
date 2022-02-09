@@ -154,4 +154,8 @@ def heuristic(n, e):
     d = math.sqrt((n.i - e.i)**2 + (n.j - e.j)**2)
     return d
 
+def main():
+    end.show( (255,8,127), 0)
+    start.show( (255,8, 127), 0)
+    
 
