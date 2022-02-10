@@ -42,6 +42,18 @@ class spot:
     def path(self, color, st):
         pygame.draw.rect(screen, color, (self.i*W, self.j*h, w, h), st)
         pygame.display.update()
+        
+    def addNeighbors(self, grid):
+        i = self.i
+        j = self.j
+        if i < cols-1 and grid[self.i + 1][j].obs == False:
+            self.neighbors.append(grid[self.i + 1][j])
+        if i > 0 and grid[self.i - 1][j].obs == False:
+            self.neighbors.append(grid[self.i - 1][j])
+        if j < row-1 and grid[self.i][j + 1].obs == False:
+            self.neighbors.append(grid[self.i][j + 1])
+        if j > 0 and grid[self.i][j - 1].obs == False:
+            self.neighbors.append(grid[self.i][j - 1])
 
 
 cols = 50
@@ -59,7 +71,7 @@ cameFrom = []
 
 
 for i in range(cols):
-    grid[i] = [0 for i in range(cols)]
+    grid[i] = [0 for i in range(row)]
 
 for i in range(cols):
     for j in range(row):
