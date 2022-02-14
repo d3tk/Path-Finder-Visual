@@ -6,6 +6,7 @@ try:
     from tkinter import ttk
     from tkinter import messagebox
     import os
+
 except:
     import install_requirements  # install packages
 
@@ -41,7 +42,7 @@ class spot:
         pygame.draw.rect(screen, color, (self.i * w, self.j * h, w, h), st)
         pygame.display.update()
 
-    def addNeighbors(self, grid):
+    def add_neighbors(self, grid):
         i = self.i
         j = self.j
         if i < cols-1 and grid[self.i + 1][j].obs == False:
@@ -55,7 +56,7 @@ class spot:
 
 
 cols = 50
-grid = [0 for i in range(cols)]
+grid = [0 for _ in range(cols)]
 row = 50
 openSet = []
 closedSet = []
@@ -69,7 +70,7 @@ cameFrom = []
 
 # create 2d array
 for i in range(cols):
-    grid[i] = [0 for i in range(row)]
+    grid[i] = [0 for _ in range(row)]
 
 # Create Spots
 for i in range(cols):
@@ -128,14 +129,13 @@ mainloop()
 pygame.init()
 openSet.append(start)
 
-def mousePress(x):
+def mouse_press(x):
     t = x[0]
     w = x[1]
     g1 = t // (800 // cols)
     g2 = w // (800 // row)
     acess = grid[g1][g2]
-    if acess != start and acess != end:
-        if acess.obs == False:
+    if (acess != start and acess != end) and acess.obs == False:
             acess.obs = True
             acess.show((255, 255, 255), 0)
 
@@ -152,21 +152,19 @@ while loop:
         if pygame.mouse.get_pressed()[0]:
             try:
                 pos = pygame.mouse.get_pos()
-                mousePress(pos)
+                mouse_press(pos)
             except AttributeError:
                 pass
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 loop = False
                 break
 
 for i in range(cols):
     for j in range(row):
-        grid[i][j].addNeighbors(grid)
+        grid[i][j].add_neighbors(grid)
 
 def heurisitic(n, e):
     d = math.sqrt((n.i - e.i)**2 + (n.j - e.j)**2)
-    #d = abs(n.i - e.i) + abs(n.j - e.j)
     return d
 
 
@@ -174,12 +172,12 @@ def main():
     end.show((255, 8, 127), 0)
     start.show((255, 8, 127), 0)
     if len(openSet) > 0:
-        lowestIndex = 0
+        lowest_index = 0
         for i in range(len(openSet)):
-            if openSet[i].f < openSet[lowestIndex].f:
-                lowestIndex = i
+            if openSet[i].f < openSet[lowest_index].f:
+                lowest_index = i
 
-        current = openSet[lowestIndex]
+        current = openSet[lowest_index]
         if current == end:
             print('done', current.f)
             start.show((255,8,127),0)
@@ -204,19 +202,19 @@ def main():
                             break
             pygame.quit()
 
-        openSet.pop(lowestIndex)
+        openSet.pop(lowest_index)
         closedSet.append(current)
 
         neighbors = current.neighbors
         for i in range(len(neighbors)):
             neighbor = neighbors[i]
             if neighbor not in closedSet:
-                tempG = current.g + current.value
+                temp_g = current.g + current.value
                 if neighbor in openSet:
-                    if neighbor.g > tempG:
-                        neighbor.g = tempG
+                    if neighbor.g > temp_g:
+                        neighbor.g = temp_g
                 else:
-                    neighbor.g = tempG
+                    neighbor.g = temp_g
                     openSet.append(neighbor)
 
             neighbor.h = heurisitic(neighbor, end)
